@@ -1,0 +1,339 @@
+\documentclass[12pt]{article}
+\usepackage{ragged2e} % load the package for justification
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usetikzlibrary{fadings}
+\usepackage{filecontents}
+\usepackage{multirow}
+\usepackage{amsmath}
+\pgfplotsset{width=10cm,compat=1.17}
+\setlength{\parskip}{0.75em} % Set the space between paragraphs
+\usepackage{setspace}
+\setstretch{1.2} % Adjust the value as per your preference
+\usepackage[margin=2cm]{geometry} % Adjust the margin
+\setlength{\parindent}{0pt} % Adjust the value for starting paragraph
+\usetikzlibrary{arrows.meta}
+\usepackage{mdframed}
+\usepackage{float}
+
+\usepackage{hyperref}
+
+% to remove the hyperline rectangle
+\hypersetup{
+	colorlinks=true,
+	linkcolor=black,
+	urlcolor=blue
+}
+
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{lipsum} % Example text package
+\usepackage{fancyhdr} % Package for customizing headers and footers
+
+\usepackage{float}
+
+
+% Define the orange color
+\definecolor{myorange}{RGB}{255,65,0}
+% Define a new color for "cherry" (dark red)
+\definecolor{cherry}{RGB}{148,0,25}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Apply the custom footer to all pages
+\pagestyle{fancy}
+
+% Redefine the header format
+\fancyhead{}
+\fancyhead[R]{\textcolor{orange!80!black}{\itshape\leftmark}}
+
+\fancyhead[L]{\textcolor{black}{\thepage}}
+
+
+% Redefine the footer format with a line before each footnote
+
+% Redefine the footnote rule
+\renewcommand{\footnoterule}{\vspace*{-3pt}\noindent\rule{0.0\columnwidth}{0.4pt}\vspace*{2.6pt}}
+
+% Set the header rule color to orange
+\renewcommand{\headrule}{\color{orange!80!black}\hrule width\headwidth height\headrulewidth \vskip-\headrulewidth}
+
+% Set the footer rule color to orange (optional)
+\renewcommand{\footrule}{\color{black}\hrule width\headwidth height\headrulewidth \vskip-\headrulewidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% Set the color for the section headings
+\titleformat{\section}
+{\normalfont\Large\bfseries\color{orange!80!black}}{\thesection}{1em}{}
+
+% Set the color for the subsection headings
+\titleformat{\subsection}
+{\normalfont\large\bfseries\color{orange!80!black}}{\thesubsection}{1em}{}
+
+% Set the color for the subsubsection headings
+\titleformat{\subsubsection}
+{\normalfont\normalsize\bfseries\color{orange!80!black}}{\thesubsubsection}{1em}{}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Set the color for the table of contents
+\titlecontents{section}
+[1.5em]{\color{orange!80!black}}
+{\contentslabel{1.5em}}
+{}{\titlerule*[0.5pc]{.}\contentspage}
+
+% Set the color for the subsections in the table of contents
+\titlecontents{subsection}
+[3.8em]{\color{orange!80!black}}
+{\contentslabel{2.3em}}
+{}{\titlerule*[0.5pc]{.}\contentspage}
+
+% Set the color for the subsubsections in the table of contents
+\titlecontents{subsubsection}
+[6em]{\color{orange!80!black}}
+{\contentslabel{3em}}
+{}{\titlerule*[0.5pc]{.}\contentspage}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% set a format for the codes inside a box with C format
+\lstset{
+	language=C,
+	basicstyle=\ttfamily,
+	backgroundcolor=\color{blue!5},
+	keywordstyle=\color{blue},
+	commentstyle=\color{codegreen},
+	stringstyle=\color{red},
+	showstringspaces=false,
+	breaklines=true,
+	frame=single,
+	rulecolor=\color{lightgray!35}, % Set the color of the frame
+	numbers=none,
+	numberstyle=\tiny,
+	numbersep=5pt,
+	tabsize=1,
+	morekeywords={include},
+	alsoletter={\#},
+	otherkeywords={\#}
+}
+
+
+
+
+%\input listings.tex
+
+
+
+% Define a command for inline code snippets with a colored and rounded box
+\newtcbox{\codebox}[1][gray]{on line, boxrule=0.2pt, colback=blue!5, colframe=#1, fontupper=\color{cherry}\ttfamily, arc=2pt, boxsep=0pt, left=2pt, right=2pt, top=3pt, bottom=2pt}
+
+
+
+
+\tikzset{%
+	every neuron/.style={
+		circle,
+		draw,
+		minimum size=1cm
+	},
+	neuron missing/.style={
+		draw=none,
+		scale=4,
+		text height=0.333cm,
+		execute at begin node=\color{black}$\vdots$
+	},
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Define a new tcolorbox style with default options
+\tcbset{
+	myboxstyle/.style={
+		colback=orange!10,
+		colframe=orange!80!black,
+	}
+}
+
+% Define a new tcolorbox style with default options to print the output with terminal style
+
+
+\tcbset{
+	myboxstyleTerminal/.style={
+		colback=blue!5,
+		frame empty, % Set frame to empty to remove the fram
+	}
+}
+
+\mdfdefinestyle{myboxstyleTerminal1}{
+	backgroundcolor=blue!5,
+	hidealllines=true, % Remove all lines (frame)
+	leftline=false,     % Add a left line
+}
+
+
+\begin{document}
+
+	\justifying
+
+	\begin{center}
+		\textbf{{\large Assignment 3}}
+
+		\textbf{Solving System of Linear Equations}
+
+		Vineet Aggarwal
+	\end{center}
+
+
+
+	\section{Introduction}
+    For the assignment, I created a program to convert a matrix into csr format and then solve the equation Ax=b for any given symmetric matrix. The code first takes the matrix, which is in .mtx format, reads its properties and content and stores it in CSR format. I then used it to solve for vector 'x' when using Ax = b, where b is defined to be a matrix of all 1's. We then print the residual norm of the vector to check for accuracy.
+	\section{Results}
+	\begin{table}[h!]
+		\caption{Results }
+		\label{table:1}
+		\centering
+		\begin{tabular}{c c c c c c c}
+			\hline
+			Problem & \multicolumn{2}{c}{Size} & &Non-zeros & CPU time (Sec) & Norm-Residual\\
+			& & $row$ & $column$ & \\
+			\hline
+			LFAT5.mtx   &   & 14 &14  &30  &0.302734 &1.45e-14\\
+			LF10.mtx &   &18  &18 &50 &0.290535& 5.77e-13\\
+			ex3.mtx & &1821  &1821  &27253 &158& 3.14\\
+			jnlbrng1.mtx  &  &40000  &40000  &119600 &66.321211 &1.27e-12\\
+			ACTIVSg70K.mtx  &  &69999   &69999   &154313 &1.75& -nan\\
+			2cubes sphere.mtx &  &101492   &101492   &874378 &-&-\\
+			tmt sym.mtx& &726713  &726713   &2903837 &-&-\\
+			StocF-1465.mtx & &1465137  &1465137   &11235263 &-&-\\
+			\hline
+		\end{tabular}
+	\end{table}
+ The 4 bonus matrices were taking too much of a toll on the cpu and taking over 10-15 minutes to even just read and sort, this means that my method was inefficient for the larger matrices, however worked for the smaller ones. The residuals I got for the 4 normal ones were all good except for the one for ex3.mtx, which was relatively high at 3.14. The lack of convergence may be attributed to several factors, such as the ill-conditioned nature of the matrix, potential deviations from diagonal dominance, and the distribution of eigenvalues. Additionally, the specific sparsity pattern, symmetry, and scaling of the matrix could have influenced the solver's effectiveness. Exploring alternative solvers, adjusting parameters, and considering preconditioning techniques are valuable strategies to enhance the robustness and efficiency of iterative solvers, particularly when dealing with matrices exhibiting challenging numerical characteristics.
+
+
+\section{Report }
+
+\subsection{Mathematical Breakdown}
+I used Gauss-Seidel, which is an iterative numerical method used to solve systems of linear equations. The method is designed to solve systems of equations represented by the matrix equation Ax = b, where A is a square matrix, x is the vector of unknowns, and b is the right-hand side vector.
+
+The algorithm proceeds through a series of iterations, refining the solution vector x in each step. In each iteration, Gauss-Seidel systematically updates each component of x based on the current approximation and the values of neighboring components. It employs the principle of forward substitution, solving for each variable in a row sequentially, using the most up-to-date values available.
+
+Specifically, for each row in the system, Gauss-Seidel calculates the sum of the products of the non-diagonal elements and their corresponding components in the solution vector. The diagonal element acts as a scaling factor, ensuring that the updated value of each variable reflects the contribution of neighboring variables.
+
+If at any point the diagonal element is found to be close to zero, the method may encounter instability or divergence, and an error message is typically issued. This condition is critical as division by near-zero values can lead to numerical instability in the computation.
+
+\subsection{Vtune}
+I was unable to get Vtune installed and working on my computer, and due to time constraints unable to complete this section.
+
+\subsection{gcov}
+Output:
+\begin{lstlisting}
+File 'main.c'
+Lines executed:93.33% of 30
+Creating 'main.c.gcov'
+
+File 'functions.c'
+Lines executed:83.33% of 84
+Creating 'functions.c.gcov'
+\end{lstlisting}
+
+This shows that the code is mostly efficient and most of the lines are running. The main function is more efficient than the functions file.
+
+\subsection{Plots}
+\subsubsection{Graphing code}
+\begin{lstlisting}
+import matplotlib.pyplot as plt
+from scipy.io import mmread
+
+# Read the Matrix Market file
+matrix = mmread('LFAT5.mtx').toarray()
+
+# Extract the row and column indices of non-zero entries
+row_ind, col_ind = (matrix != 0).nonzero()
+
+# Create a figure with a slightly blue background
+fig, ax = plt.subplots()
+ax.set_facecolor('#e6f7ff')  # Light blue background color
+
+# Plot the non-zero entries as squares
+square_size = 1  # Adjust the square size as needed
+scatter = ax.scatter(col_ind, row_ind, marker='s', color='blue', label='Non-zero entries', s=square_size)
+
+# Customize the plot
+ax.set_title('Matrix Sparsity Plot with Squares', color='navy', fontsize=16)
+ax.set_xlabel('Column Index', color='navy')
+ax.set_ylabel('Row Index', color='navy')
+ax.invert_yaxis()  # Invert the y-axis to keep the flip
+ax.grid(True, linestyle='--', alpha=0.7)
+ax.legend()
+
+# Set the aspect ratio to be equal
+ax.set_aspect('equal')
+
+# Set the color of tick labels
+ax.tick_params(axis='x', colors='navy')
+ax.tick_params(axis='y', colors='navy')
+
+# Show the plot
+plt.show()
+
+\end{lstlisting}
+
+
+\subsubsection{LFAT5.mtx}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\linewidth]{LFAT5.png}
+    \caption{LFAT5 Matrix Sparsity Plot}
+    \label{fig:LFAT5-matrix}
+\end{figure}
+
+\subsubsection{LF10.mtx}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\linewidth]{LF10.png}
+    \caption{LF10 Matrix Sparsity Plot}
+    \label{fig:LF10-matrix}
+\end{figure}
+\clearpage
+\subsubsection{ex3.mtx}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\linewidth]{ex3.png}
+    \caption{ex3 Matrix Sparsity Plot}
+    \label{fig:ex3-matrix}
+\end{figure}
+
+\subsubsection{jnlbrng.mtx}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\linewidth]{jnlbrng1.png}
+    \caption{jnlbrng1 Matrix Sparsity Plot}
+    \label{fig:jnlbrng1-matrix}
+\end{figure}
+
+I was not able to plot all of the matrices due to the amount of time it was taking, the files are too large and as the scale increases the individual symmetric portions become harder to see. (Anything other than the diagonal line)
+
+\subsection{Makefile}
+This Makefile is a set of instructions for compiling and linking a C program consisting of two source files, namely `main.c` and `functions.c`. The `CC` variable is assigned the value `gcc`, specifying the compiler to be used. Compilation flags are set through the `CFLAGS` variable, including options like `-Wall` for displaying all warning messages, `-Wextra` for enabling extra warning messages, `-g` for including debugging information, and `-O3` for optimizing the code for performance. The `LDFLAGS` variable includes flags for linking, such as `-lm` for linking the math library, `-lrt` for linking the real-time library, and `-pg` for enabling profiling.
+
+The source files are listed in the `SOURCES` variable (`main.c` and `functions.c`), and the corresponding object files are generated by replacing the `.c` extension with `.o` and stored in the `OBJECTS` variable. The executable's name is specified in the `EXECUTABLE` variable as `myprogram`.
+
+The default target is set to `all`, which depends on the executable target (`(EXECUTABLE)`). Running `make` without specifying a target will build the executable. The linking step is defined, stating that the executable depends on the object files, and it specifies the compilation and linking command using the compiler (`(CC)`), object files (`(OBJECTS)`), output file (`-o (EXECUTABLE)`), and linker flags (`(LDFLAGS)`).
+
+A pattern rule is provided for the compilation step of each source file into an object file. The rule utilizes the compiler (`(CC)`), compilation flags (`(CFLAGS)`), and specifies the source and target files using `<` and `@` placeholders, respectively.
+
+Finally, a `clean` target is defined to remove the generated object files and the executable. The `rm -f` command removes files specified by `(OBJECTS)` and `(EXECUTABLE)`.\\
+
+\end{document}
